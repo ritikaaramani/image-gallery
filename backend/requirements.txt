@@ -1,0 +1,32 @@
+# Web framework
+fastapi==0.103.1
+uvicorn[standard]==0.23.2
+
+# Database
+sqlalchemy==2.0.20
+psycopg2-binary==2.9.9  # PostgreSQL driver
+
+# Redis + RQ for background jobs (if your gallery uses async jobs)
+redis==4.5.5
+rq==1.15.0
+
+# Pydantic for data validation
+pydantic==2.5.2
+
+# HTTP requests (if gallery fetches external images)
+httpx==0.24.1
+requests==2.31.0
+
+# Supabase client (if your gallery uses Supabase for storage)
+supabase==2.7.0
+python-dotenv==1.0.0  # for .env config
+
+# Image processing / file handling
+pillow==10.0.0
+
+# Async support
+anyio==4.0.0
+
+# Optional: typing / dev
+typing-extensions==4.8.0
+
