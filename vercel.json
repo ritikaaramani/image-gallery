@@ -1,0 +1,11 @@
+{
+  "functions": {
+    "backend/app/main.py": { "runtime": "@vercel/python" }
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "backend/app/main.py"
+    }
+  ]
+}
