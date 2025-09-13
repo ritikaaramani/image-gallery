@@ -72,18 +72,23 @@ export default function Navbar() {
 
         <button
           style={{
-            padding: "0.5rem 1rem",
-            borderRadius: "10px",
-            border: "1px solid rgba(15,23,42,0.1)",
-            background: "transparent",
-            color: "var(--text)",
-            fontWeight: 500,
-            transition: "0.2s",
+          padding: "0.5rem 1rem",
+          borderRadius: "10px",
+          border: "1px solid rgba(15,23,42,0.1)",
+          background: "transparent",
+          color: "var(--text)",
+          fontWeight: 500,
+          transition: "0.2s",
           }}
-          onClick={() => router.push("/about")}
-        >
-          About
-        </button>
+          onClick={() => window.open(
+            "https://week2ai-frontend-405356130067.us-central1.run.app/",
+            "_blank",
+            "noopener,noreferrer"
+          )}
+      >
+      AI Image generation
+      </button>
+
 
         {isLoggedIn ? (
           <button
