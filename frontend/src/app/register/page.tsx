@@ -56,8 +56,12 @@ export default function RegisterPage() {
       setPassword("");
       setMaptchaResponse("");
       generateCaptcha(); // refresh captcha
-    } catch (err: any) {
-      setMessage(`❌ Error: ${err.message}`);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setMessage(`❌ Error: ${err.message}`);
+      } else {
+        setMessage("❌ An unknown error occurred");
+      } 
     }
   };
 

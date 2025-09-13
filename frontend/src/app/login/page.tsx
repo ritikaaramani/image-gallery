@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState(''); // ✅ added message state
   const API = "http://localhost:8000";
   const [a, setA] = useState(0);
   const [b, setB] = useState(0);
@@ -28,7 +29,7 @@ export default function LoginPage() {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({
-          username,   // ✅ correct
+          username,
           password,
         }),
       });
@@ -39,8 +40,12 @@ export default function LoginPage() {
       localStorage.setItem("token", data.access_token);
       alert("Login successful! Token saved to localStorage.");
       setCap('');
-    } catch (err: any) {
-      alert(`Error: ${err.message}`);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setMessage(`❌ Error: ${err.message}`);
+      } else {
+        setMessage("❌ An unknown error occurred");
+      }
     }
   };
 
@@ -94,6 +99,12 @@ export default function LoginPage() {
             />
           </div>
         </form>
+
+        {message && (
+          <p className="mt-4 text-center text-sm font-medium text-gray-700">
+            {message}
+          </p>
+        )}
       </div>
     </div>
   );
