@@ -10,7 +10,8 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'your-backend.onrender.com',
+        hostname: 'image-gallery-wcle.onrender.com',
+        port: '',
         pathname: '/static/uploads/**',
       },
     ],
