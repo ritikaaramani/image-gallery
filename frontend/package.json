@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p $PORT",
+    "export": "next export",
+    "start": "serve -s out -l $PORT",
     "lint": "eslint",
     "tailwind:init": "tailwindcss init -p"
   },
@@ -23,6 +24,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
     "postcss": "^8.5.6",
+    "serve": "^14.2.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
   }
