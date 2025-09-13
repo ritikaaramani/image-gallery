@@ -1,0 +1,20 @@
+{
+  "name": "nextjs-ai-generator",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "dev:all": "concurrently \"npm run dev\" \"npm run docker:up\"",
+    "docker:up": "docker-compose -f ../docker-compose.yml up"
+  },
+  "dependencies": {
+    "next": "^15.5.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

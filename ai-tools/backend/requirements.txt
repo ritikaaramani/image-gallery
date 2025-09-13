@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+alembic
+python-dotenv
+pillow
+requests
+redis
+rq
+psycopg2-binary 
+replicate 
+requests
+pydantic
+
+

@@ -1,0 +1,44 @@
+services:
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  backend:
+    env_file:
+      - ./.env
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    volumes:
+      - ./backend:/app/backend
+      - ./generated:/app/generated
+      - ./data:/data                   # <--- shared folder for DB
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=sqlite:////data/backend.db
+      - BASE_URL=http://localhost:8000
+      - REPLICATE_API_TOKEN: "<YOUR_API_TOKEN_HERE>"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+
+  worker:
+    env_file:
+      - ./.env
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    volumes:
+      - ./backend:/app/backend
+      - ./generated:/app/generated
+      - ./data:/data                   # <--- same folder mounted
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=sqlite:////data/backend.db
+      - BASE_URL=http://localhost:8000
+    depends_on:
+      - redis
+      - backend
+    command: ["python", "backend/run_worker.py"]

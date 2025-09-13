@@ -1,0 +1,42 @@
+# Python venv
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE/project files
+.vscode/
+.idea/
+*.swp
+
+# Environment / secrets
+.env
+
+# Databases
+*.db
+dev.db
+
+# Redis dump
+dump.rdb
+
+# Generated files
+/generated/
+backend/generated/
+*.png
+*.jpg
+*.jpeg
+
+# Logs
+*.log
+
+# OS stuff
+.DS_Store
+Thumbs.db
+
+node_modules/

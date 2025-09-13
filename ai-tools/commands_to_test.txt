@@ -1,0 +1,20 @@
+shell1: (in venv):  python -m uvicorn backend.app.main:app --reload --host 127.0.0.1 --port 8000
+
+shell2: (in venv): python backend\run_worker.py
+
+shell3: (in venv): (only for testing): json in the format:
+$json_body = @'
+{
+    "prompt": "make a symbol with the letter AARH",
+    "seed": 42,
+    "width": 512,
+    "height": 512,
+    "steps": 20,
+    "batch": 1,
+    "provider": "replicate",
+    "base_url": "http://127.0.0.1:8000"
+}
+'@
+ 
+Invoke-RestMethod -Uri "http://127.0.0.1:8000/generate" -Method Post -ContentType "application/json" -Body $json_body
+
