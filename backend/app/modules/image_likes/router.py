@@ -6,9 +6,13 @@ from app.auth.dependencies import get_current_user
 from app.modules.users.schemas import User as UserSchema
 from app.modules.images import schemas as image_schemas
 from app.modules.image_likes.service import LikesService
+from pydantic import BaseModel
 
-router = APIRouter(prefix="/likes", tags=["Likes"])
 
+router = APIRouter(tags=["Likes"])
+
+class LikeRequest(BaseModel):
+    image_id: str
 # Dependency to get service instance
 def get_likes_service() -> LikesService:
     return LikesService()
@@ -120,14 +124,14 @@ def get_my_liked_images_endpoint(
             detail=f"Failed to get your liked images: {str(e)}"
         )
 
-# Toggle endpoint (more user-friendly)
 @router.post("/toggle", status_code=status.HTTP_200_OK)
 def toggle_like_endpoint(
-    image_id: UUID = Body(..., embed=True),
+    body: LikeRequest,
     user: UserSchema = Depends(get_current_user),
     service: LikesService = Depends(get_likes_service)
 ):
     """Toggle like status for an image (add if not liked, remove if liked)"""
+    image_id = body.image_id
     try:
         is_liked = service.is_liked_by_user(image_id, user.id)
         
@@ -143,7 +147,7 @@ def toggle_like_endpoint(
                 "message": "Like removed",
                 "action": "removed",
                 "is_liked": False,
-                "image_id": str(image_id)
+                "image_id": image_id
             }
         else:
             # Add like
@@ -152,7 +156,7 @@ def toggle_like_endpoint(
                 "message": "Like added",
                 "action": "added", 
                 "is_liked": True,
-                "image_id": str(image_id),
+                "image_id": image_id,
                 "like": result.get("like")
             }
             

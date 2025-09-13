@@ -12,7 +12,7 @@ from app.modules.users.schemas import User as UserSchema
 from app.auth.dependencies import get_current_user
 
 # Correct prefix for the comments router
-router = APIRouter(prefix="/comments", tags=["Comments"])
+router = APIRouter(tags=["Comments"])
 
 # -----------------------------
 # Endpoints for Album Comments

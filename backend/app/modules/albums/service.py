@@ -9,10 +9,14 @@ from app.modules.rights import service as rights_service
 from app.modules.users import schemas as user_schemas
 from app.modules.rights.service import RightsService
 from app.modules.images import models as image_models
+from .models import Album
+from ..images.models import Image
 
 rights_service = RightsService()
 
 class AlbumService:
+    def __init__(self):
+        self.model = Album
     def generate_slug(self, title: str) -> str:
         slug = title.strip().lower()
         slug = re.sub(r'[^a-z0-9\s-]', '', slug)
@@ -89,3 +93,16 @@ class AlbumService:
         db.commit()
         db.refresh(image)
         return image
+    def remove_image_from_album(self, db: Session, album_id: UUID, image_id: UUID) -> bool:
+        album = db.query(self.model).filter(self.model.id == album_id).first()
+        if not album:
+            return False
+
+        image = next((img for img in album.images if img.id == image_id), None)
+        if not image:
+            return False
+
+        album.images.remove(image)
+        db.commit()
+        return True
+

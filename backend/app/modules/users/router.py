@@ -39,13 +39,14 @@ def create_user_endpoint(
     user: schemas.UserCreate,
     db: Session = Depends(get_db),
 ):
-    '''if user.maptcha_response is not None or user.maptcha_challenge is not None:
+    # Optional captcha validation if provided by client
+    if user.maptcha_response is not None or user.maptcha_challenge is not None:
         if not verify_maptcha(
             user.maptcha_response,
             user.maptcha_requested,
             user.maptcha_challenge,
         ):
-            raise HTTPException(status_code=400, detail="Invalid captcha")'''
+            raise HTTPException(status_code=400, detail="Invalid captcha")
     try:
         db_user = service.create_user_service(db, user)
     except ValueError as ve:

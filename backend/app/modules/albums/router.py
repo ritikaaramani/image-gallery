@@ -82,3 +82,19 @@ def admin_delete_album(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Album not found")
     return
 
+@router.delete("/{album_id}/images/{image_id}", status_code=status.HTTP_204_NO_CONTENT)
+def remove_image_from_album(
+    album_id: UUID,
+    image_id: UUID,
+    db: Session = Depends(get_db),
+    service: AlbumService = Depends(AlbumService)
+):
+    try:
+        success = service.remove_image_from_album(db, album_id, image_id)
+        if not success:
+            raise HTTPException(status_code=404, detail="Image or Album not found")
+        return
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+

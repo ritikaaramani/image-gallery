@@ -1,4 +1,3 @@
-# app/modules/uploads/service.py
 import os
 import uuid
 import json
@@ -8,6 +7,7 @@ from typing import Optional, List, Dict, Any
 from PIL import Image, ExifTags
 from io import BytesIO
 import shutil
+from uuid import UUID
 from fastapi import UploadFile, HTTPException, status
 from app.modules.images import models as image_models # Import Image model
 
@@ -29,15 +29,18 @@ class UploadService:
         """
         Save UploadFile-like object to dest_path atomically.
         """
-        if hasattr(upload_file, "file"):
-            fh = upload_file.file
-            fh.seek(0)
-            with open(dest_path, "wb") as out_f:
-                shutil.copyfileobj(fh, out_f)
-            fh.seek(0)
-        else:
-            with open(dest_path, "wb") as out_f:
-                out_f.write(upload_file.read())
+        temp_dest_path = dest_path + '.temp'
+        try:
+            with open(temp_dest_path, "wb") as out_f:
+                if hasattr(upload_file, "file"):
+                    shutil.copyfileobj(upload_file.file, out_f)
+                else:
+                    out_f.write(upload_file.read())
+            os.rename(temp_dest_path, dest_path)
+        except Exception as e:
+            if os.path.exists(temp_dest_path):
+                os.remove(temp_dest_path)
+            raise e
 
     def _extract_exif(self, pil_image: Image.Image) -> Dict[str, Any]:
         """
@@ -104,15 +107,15 @@ class UploadService:
                 thumb_name = f"{upload_id}_thumb.jpg"
                 thumb_path = os.path.join(self.thumb_dir, thumb_name)
                 self._make_thumbnail(im, thumb_path)
-                thumbnail_url = f"{BASE_URL}/uploads/thumbs/{thumb_name}"
+                thumbnail_url = f"{BASE_URL}/static/uploads/thumbs/{thumb_name}"
         except Exception:
             pass
 
-        public_url = f"{BASE_URL}/uploads/{safe_filename}"
+        public_url = f"{BASE_URL}/static/uploads/{safe_filename}"
 
         db_upload = models.Upload(
             id=upload_id,
-            filename=original_filename,
+            filename=safe_filename,
             storage_path=dest_path,
             url=public_url,
             thumbnail_url=thumbnail_url,
@@ -135,7 +138,17 @@ class UploadService:
 
     # CRUD helpers
     def get_upload(self, db: Session, upload_id: str) -> Optional[models.Upload]:
-        return db.query(models.Upload).filter(models.Upload.id == str(upload_id)).first()
+        """
+        Fetch by UUID safely. Raises 400 if invalid UUID format.
+        """
+        try:
+            uid = UUID(upload_id)
+        except ValueError:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid upload ID format")
+        return db.query(models.Upload).filter(models.Upload.id == uid).first()
+
+    def get_upload_by_filename(self, db: Session, filename: str) -> Optional[models.Upload]:
+        return db.query(models.Upload).filter(models.Upload.filename == filename).first()
 
     def list_uploads(self, db: Session, skip: int = 0, limit: int = 100):
         return db.query(models.Upload).offset(skip).limit(limit).all()
@@ -145,21 +158,25 @@ class UploadService:
         if not upload:
             return None
 
-        # also delete the associated image record if it exists
-        if upload.image:
-            db.delete(upload.image)
-        
-        try:
-            if upload.storage_path and os.path.exists(upload.storage_path):
-                os.remove(upload.storage_path)
-            if upload.thumbnail_url:
-                thumb_filename = os.path.basename(upload.thumbnail_url)
-                thumb_path = os.path.join(self.thumb_dir, thumb_filename)
-                if os.path.exists(thumb_path):
-                    os.remove(thumb_path)
-        except Exception:
-            pass
+        storage_path = upload.storage_path
+        thumbnail_path = None
+        if upload.thumbnail_url:
+            thumb_filename = os.path.basename(upload.thumbnail_url)
+            thumbnail_path = os.path.join(self.thumb_dir, thumb_filename)
 
-        db.delete(upload)
-        db.commit()
+        try:
+            if upload.image:
+                db.delete(upload.image)
+            db.delete(upload)
+            db.commit()
+            
+            if storage_path and os.path.exists(storage_path):
+                os.remove(storage_path)
+            if thumbnail_path and os.path.exists(thumbnail_path):
+                os.remove(thumbnail_path)
+
+        except Exception as e:
+            db.rollback()
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to delete upload files: {str(e)}")
+
         return upload

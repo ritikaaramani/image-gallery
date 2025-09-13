@@ -8,6 +8,7 @@ class ImageBase(BaseModel):
     title: str
     caption: Optional[str] = None
     privacy: str = "public"
+    album_id: Optional[UUID] = None
     license: Optional[str] = None
 
 class ImageCreate(ImageBase):
@@ -19,6 +20,7 @@ class ImageResponse(BaseModel):
     caption: Optional[str]
     privacy: str
     license: Optional[str]
+    album_id: Optional[UUID] = None
     filename: str
     mime_type: str
 

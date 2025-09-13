@@ -24,6 +24,9 @@ def authenticate_user(db: Session, username: str, password: str):
     user = db.query(user_models.User).filter_by(username=username).first()
     if not user:
         return None
-    if not bcrypt.checkpw(password.encode(), user.password.encode()):
+    
+    # Ensure both passwords are bytes before checking
+    if not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
         return None
+        
     return user
