@@ -36,7 +36,13 @@ export default function ImageCard({
 }: ImageCardProps) {
   return (
     <div className="bg-[#ffece6ff] rounded-2xl shadow-md overflow-hidden flex flex-col transition-transform transform hover:scale-105">
-      <Image src={url} alt={title} className="w-full h-40 object-cover" />
+      <Image
+        src={url}
+        alt={title}
+        width={400}   // set approximate width
+        height={160}  // set approximate height
+        className="object-cover"
+      />
 
       <div className="p-4 flex-1 flex flex-col justify-between">
         <div>

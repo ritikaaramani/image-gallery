@@ -1180,7 +1180,23 @@ export default function Gallery() {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-80 overflow-auto mb-4">
                 {albumAddResults.map((img) => (
                   <div key={img.id} className="border rounded-lg overflow-hidden">
-                    <Image src={img.url} alt={img.title} className="w-full h-28 object-cover" />
+                    {/* Image wrapper for fill */}
+                    <div className="relative w-full h-28">
+                      <Image
+                        src={img.url}
+                        alt={img.title}
+                        fill
+                        className="object-cover"
+                        onError={(e) => {
+                        console.error('Failed to load image:', img.url);
+                        e.currentTarget.src =
+                        'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y3ZjdmNyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjYWFhIj5JbWFnZSBub3QgZm91bmQ8L3RleHQ+PC9zdmc+';
+                      }}
+                        onLoad={() => {
+                          console.log('Image loaded successfully:', img.url);
+                        }}
+                      />
+                    </div>
                     <div className="p-2 flex items-center justify-between text-sm">
                       <span className="truncate mr-2">{img.title}</span>
                       <button
@@ -1280,19 +1296,23 @@ export default function Gallery() {
                 key={id}
                 className="bg-[#f6ebfaff] rounded-2xl shadow-md overflow-hidden flex flex-col transition-transform transform hover:scale-105"
               >
-                <Image 
-                  ref={registerImageElement(id)}
-                  src={url} 
-                  alt={title} 
-                  className="w-full h-40 object-cover"
-                  onError={(e) => {
+                <div className="relative w-full h-40 rounded-t-xl overflow-hidden">
+                  <Image
+                    ref={registerImageElement(id)}
+                    src={url}
+                    alt={title}
+                    fill
+                    className="object-cover"
+                    onError={(e) => {
                     console.error('Failed to load image:', url);
-                    e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y3ZjdmNyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjYWFhIj5JbWFnZSBub3QgZm91bmQ8L3RleHQ+PC9zdmc+';
-                  }}
-                  onLoad={() => {
-                    console.log('Image loaded successfully:', url);
-                  }}
+                    e.currentTarget.src =
+                      'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y3ZjdmNyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjYWFhIj5JbWFnZSBub3QgZm91bmQ8L3RleHQ+PC9zdmc+';
+                    }}
+                    onLoad={() => {
+                      console.log('Image loaded successfully:', url);
+                    }}
                 />
+                </div>
 
                 <div className="p-4 flex-1 flex flex-col justify-between">
                   <div>
@@ -1407,7 +1427,10 @@ export default function Gallery() {
               className="text-left bg-[#f6ebfaff] rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow"
             >
               {album.cover_image && album.cover_image.trim() !== '' ? (
-                <Image src={album.cover_image} alt={album.title} className="w-full h-40 object-cover" />
+                <div className="w-full h-40 relative">
+                  <Image src={album.cover_image} alt={album.title} fill className="object-cover rounded-md" />
+                </div>
+
               ) : (
                 <div className="w-full h-40 bg-[f6ebfaff] flex items-center justify-center">
                   <div className="text-center text-gray-500">
@@ -1496,19 +1519,10 @@ export default function Gallery() {
                     className="bg-[#f6ebfaff] rounded-2xl shadow-md overflow-hidden flex flex-col transition-transform transform hover:scale-105"
                   >
                     {url ? (
-                      <Image 
-                        ref={registerImageElement(id)}
-                        src={url} 
-                        alt={title} 
-                        className="w-full h-40 object-cover"
-                        onError={(e) => {
-                          console.error('Failed to load image:', url);
-                          e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y3ZjdmNyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjYWFhIj5JbWFnZSBub3QgZm91bmQ8L3RleHQ+PC9zdmc+';
-                        }}
-                        onLoad={() => {
-                          console.log('Image loaded successfully:', url);
-                        }}
-                      />
+                      <div className="w-full h-40 relative">
+                        <Image ref={registerImageElement(id)} src={url} alt={title} className="object-cover" onError={(e) => { console.error('Failed to load image:', url); e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y3ZjdmNyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjYWFhIj5JbWFnZSBub3QgZm91bmQ8L3RleHQ+PC9zdmc+'; }} onLoad={() => { console.log('Image loaded successfully:', url); }} fill />
+                      </div>
+
                     ) : (
                       <div className="w-full h-40 [f6ebfaff] flex items-center justify-center text-gray-500">No image</div>
                     )}
