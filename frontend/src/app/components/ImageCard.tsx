@@ -35,7 +35,7 @@ export default function ImageCard({
 }: ImageCardProps) {
   return (
     <div className="bg-[#ffece6ff] rounded-2xl shadow-md overflow-hidden flex flex-col transition-transform transform hover:scale-105">
-      <img src={url} alt={title} className="w-full h-40 object-cover" />
+      <Image src={url} alt={title} className="w-full h-40 object-cover" />
 
       <div className="p-4 flex-1 flex flex-col justify-between">
         <div>

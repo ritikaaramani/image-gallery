@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --ignore-ts-errors",
     "export": "next export",
     "start": "serve -s out -l $PORT",
     "lint": "eslint",

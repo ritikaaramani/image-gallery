@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from 'next/image';
 
 const API = "http://localhost:8000";
 
@@ -1179,7 +1180,7 @@ export default function Gallery() {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-80 overflow-auto mb-4">
                 {albumAddResults.map((img) => (
                   <div key={img.id} className="border rounded-lg overflow-hidden">
-                    <img src={img.url} alt={img.title} className="w-full h-28 object-cover" />
+                    <Image src={img.url} alt={img.title} className="w-full h-28 object-cover" />
                     <div className="p-2 flex items-center justify-between text-sm">
                       <span className="truncate mr-2">{img.title}</span>
                       <button
@@ -1279,7 +1280,7 @@ export default function Gallery() {
                 key={id}
                 className="bg-[#f6ebfaff] rounded-2xl shadow-md overflow-hidden flex flex-col transition-transform transform hover:scale-105"
               >
-                <img 
+                <Image 
                   ref={registerImageElement(id)}
                   src={url} 
                   alt={title} 
@@ -1406,7 +1407,7 @@ export default function Gallery() {
               className="text-left bg-[#f6ebfaff] rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow"
             >
               {album.cover_image && album.cover_image.trim() !== '' ? (
-                <img src={album.cover_image} alt={album.title} className="w-full h-40 object-cover" />
+                <Image src={album.cover_image} alt={album.title} className="w-full h-40 object-cover" />
               ) : (
                 <div className="w-full h-40 bg-[f6ebfaff] flex items-center justify-center">
                   <div className="text-center text-gray-500">
@@ -1495,7 +1496,7 @@ export default function Gallery() {
                     className="bg-[#f6ebfaff] rounded-2xl shadow-md overflow-hidden flex flex-col transition-transform transform hover:scale-105"
                   >
                     {url ? (
-                      <img 
+                      <Image 
                         ref={registerImageElement(id)}
                         src={url} 
                         alt={title} 
