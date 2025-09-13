@@ -406,7 +406,7 @@ export default function Gallery() {
     if (!token) return;
     try {
       const isAdmin = !!currentUser?.is_active && !!(currentUser as any)?.is_admin;
-      const url = isAdmin ? `${API}/uploads?all=true` : `${API}/uploads`;
+      const url = isAdmin ? `${API}/uploads?all=true` : `${API}/uploads/`;
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -467,7 +467,7 @@ export default function Gallery() {
       if (description) uploadFormData.append('description', description);
       uploadFormData.append('privacy', 'public');
       
-      const uploadRes = await fetch(`${API}/uploads`, {
+      const uploadRes = await fetch(`${API}/uploads/`, {
         method: 'POST',
         headers: {  
           'Authorization': `Bearer ${token}`
@@ -754,7 +754,7 @@ export default function Gallery() {
         const uploadFormData = new FormData();
         uploadFormData.append('file', file);
         uploadFormData.append('privacy', 'public');
-        const uploadRes = await fetch(`${API}/uploads`, {
+        const uploadRes = await fetch(`${API}/uploads/`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` },
           body: uploadFormData,
