@@ -1,4 +1,4 @@
-const API = "http://localhost:8000";
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export async function fetchImages(skip = 0, limit = 100) {
   const res = await fetch(`${API}/images/images/?skip=${skip}&limit=${limit}`);

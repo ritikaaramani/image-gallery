@@ -6,7 +6,7 @@ export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState(''); // ✅ added message state
-  const API = "http://localhost:8000";
+  const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
   const [a, setA] = useState(0);
   const [b, setB] = useState(0);
   const [cap, setCap] = useState('');

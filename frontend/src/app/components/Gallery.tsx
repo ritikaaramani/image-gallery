@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from 'next/image';
 
-const API = "http://localhost:8000";
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 interface Comment {
   id: string;

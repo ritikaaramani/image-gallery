@@ -7,7 +7,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const API = "http://localhost:8000";
+  const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
   const [a, setA] = useState(0);
   const [b, setB] = useState(0);
   const [maptchaResponse, setMaptchaResponse] = useState("");
