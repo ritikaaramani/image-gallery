@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "export": "next export",
-    "start": "serve -s out -l $PORT",
+    "start": "next start",
     "lint": "eslint",
     "tailwind:init": "tailwindcss init -p"
   },
